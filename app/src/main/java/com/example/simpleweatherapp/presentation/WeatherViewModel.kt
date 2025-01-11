@@ -2,7 +2,6 @@ package com.example.simpleweatherapp.presentation;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewModelScope;
-import com.example.simpleweatherapp.Event;
 import com.example.simpleweatherapp.data.NavigationType;
 import com.example.simpleweatherapp.data.offline.City;
 import com.example.simpleweatherapp.domain.AddCityUseCase;

@@ -1,4 +1,4 @@
-package com.example.simpleweatherapp.presentation;
+package com.example.simpleweatherapp.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -12,7 +12,18 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.simpleweatherapp.R
 
-
+/**
+ * The DetailsScreen composable displays detailed weather information for a specific city.
+ *
+ * @param description Weather description (e.g., "Sunny").
+ * @param temperature Temperature value (e.g., "25°C").
+ * @param humidity Humidity percentage (e.g., "60%").
+ * @param windSpeed Wind speed value (e.g., "15 km/h").
+ * @param iconUrl URL of the weather icon to display.
+ * @param cityName Name of the city for which weather data is shown.
+ * @param timestamp Timestamp indicating when the weather information was retrieved.
+ * @param onDismiss Callback triggered when the back button is pressed.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
@@ -53,6 +64,18 @@ fun DetailsScreen(
     }
 }
 
+/**
+ * Displays the content of the weather details screen, including a header, weather icon, and weather information.
+ *
+ * @param description Weather description.
+ * @param temperature Temperature value.
+ * @param humidity Humidity percentage.
+ * @param windSpeed Wind speed value.
+ * @param iconUrl URL of the weather icon.
+ * @param cityName City name.
+ * @param timestamp Timestamp of the weather data.
+ * @param paddingValues Padding values to respect the scaffold's layout.
+ */
 @Composable
 fun WeatherDetailsContent(
     description: String,
@@ -83,6 +106,12 @@ fun WeatherDetailsContent(
     }
 }
 
+/**
+ * Displays a header with the city name and timestamp of the weather data.
+ *
+ * @param cityName Name of the city.
+ * @param timestamp Timestamp of the weather data retrieval.
+ */
 @Composable
 fun WeatherDetailsHeader(cityName: String, timestamp: String) {
     Text(
@@ -92,6 +121,11 @@ fun WeatherDetailsHeader(cityName: String, timestamp: String) {
     )
 }
 
+/**
+ * Displays a weather icon using the provided URL.
+ *
+ * @param iconUrl URL of the weather icon.
+ */
 @Composable
 fun WeatherIcon(iconUrl: String) {
     AsyncImage(
@@ -103,6 +137,14 @@ fun WeatherIcon(iconUrl: String) {
     )
 }
 
+/**
+ * Displays detailed weather information, including description, temperature, humidity, and wind speed.
+ *
+ * @param description Weather description.
+ * @param temperature Temperature value.
+ * @param humidity Humidity percentage.
+ * @param windSpeed Wind speed value.
+ */
 @Composable
 fun WeatherDetailsInfo(
     description: String,
