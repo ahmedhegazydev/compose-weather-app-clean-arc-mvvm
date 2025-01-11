@@ -1,5 +1,6 @@
 package com.example.simpleweatherapp.domain
 
+import com.example.simpleweatherapp.data.NavigationType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -142,8 +143,7 @@ fun Weather.toViewState(): WeatherViewState {
         windSpeed = "${wind.speed}",
         //https://openweathermap.org/weather-conditions
         iconUrl = "https://openweathermap.org/img/wn/${weatherDescriptions.firstOrNull()?.icon ?: "01d"}" +
-//                "@2x.png",
-                ".png",
+                "@2x.png",
         cityName = name,
         timestamp = SimpleDateFormat("dd.MM.yyyy - HH:mm", Locale.getDefault()).format(
             Date(
@@ -154,3 +154,15 @@ fun Weather.toViewState(): WeatherViewState {
         weathers = weatherDescriptions
     )
 }
+
+
+/**
+ * Data class used to manage navigation between different screens in the app.
+ *
+ * @property navigationType The type of navigation (e.g., DETAILS or HISTORICAL).
+ * @property viewState Optional weather view state to pass to the target screen.
+ */
+data class NavigationData(
+    val navigationType: NavigationType,
+    val viewState: WeatherViewState? = null
+)

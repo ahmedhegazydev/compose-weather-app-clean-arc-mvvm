@@ -1,7 +1,6 @@
 package com.example.simpleweatherapp.presentation
 
 import android.net.Uri
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,23 +8,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import coil.compose.AsyncImage
 import com.example.simpleweatherapp.R
 import com.example.simpleweatherapp.data.NavigationType
 import com.example.simpleweatherapp.data.offline.City
@@ -69,9 +66,9 @@ fun WeatherApp(
                 iconUrl,
                 cityName,
                 timestamp,
-                navController = navController
-
-            )
+            ) {
+                navController.navigateUp()
+            }
 
         }
 
@@ -106,116 +103,67 @@ fun WeatherApp(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoricalWeatherScreen(
-    weather: WeatherViewState,
-    cityName: String,
-    onDismiss: () -> Unit,
-
-    ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-
-                title = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("$cityName Historical")
-                    }
-                },
-                navigationIcon = {
-                    TextButton(
-                        modifier =
-                        Modifier.border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = MaterialTheme.shapes.small
-                        ),
-                        onClick = { onDismiss() }) {
-                        Text(
-                            text = "Done",
-                            color = Color.Black,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                }
-
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-
-            LazyColumn {
-                items(weather.weathers) { weatherDescription ->
-                    HistoricalWeatherItem(
-                        weather.timestamp,
-                        weather.temperature,
-                        weatherDescription.description
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun HistoricalWeatherItem(
-    dateTime: String,
-    temperature: String,
-    weatherDescription: String,
-
-    ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(dateTime, style = MaterialTheme.typography.titleLarge)
-            Text("$weatherDescription, $temperature", style = MaterialTheme.typography.titleLarge)
-        }
-
-        Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = "Details",
-            modifier = Modifier.align(Alignment.CenterVertically)
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 fun CityListScreen(
     navController: NavHostController,
     viewModel: WeatherViewModel,
 ) {
     var selectedCity by remember { mutableStateOf<City?>(null) }
-    val weatherState by viewModel.weatherState.collectAsState()
     val cities by viewModel.cities.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var cityName by remember { mutableStateOf("") }
-    val navigationType by viewModel.navigationType.collectAsState()
+
+    val navigationEvent by viewModel.navigationEvent.collectAsState()
 
     Scaffold(
-        topBar = { CitiesTopAppBar { showDialog = true } }
+        topBar = {
+            CitiesTopAppBar("Cities",
+                rightIcon = { modifier ->
+                    IconButton(
+                        onClick = { showDialog = true },
+                        modifier = modifier
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add City"
+                        )
+                    }
+                })
+        }
     ) { paddingValues ->
+
+        LaunchedEffect(navigationEvent) {
+            navigationEvent?.getContentIfNotHandled()?.let { navigationData ->
+                navigationData.viewState?.let {
+                    handleNavigation(
+                        navigationType = navigationData.navigationType,
+                        success = it,
+                        navController = navController
+                    )
+                }
+            }
+        }
+
         CityListContent(
             cities = cities,
-            weatherState = weatherState,
-            selectedCity = selectedCity,
-            setSelectedCity = { selectedCity = it },
-            navigationType = navigationType,
-            viewModel = viewModel,
-            navController = navController,
-            paddingValues = paddingValues
-        )
+            paddingValues = paddingValues,
+            setSelectedCity = {
+                selectedCity = it
+                it?.let { city ->
+                    viewModel.navigateToDetails(city)
+                }
+
+            },
+
+            setHistoricalCity = {
+                selectedCity = it
+                it?.let { city ->
+                    viewModel.navigateToHistorical(city)
+                }
+
+            },
+
+            )
 
         if (showDialog) {
             AddCityDialog(
@@ -243,73 +191,49 @@ fun AddCityDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add City") },
+        title = { Text(stringResource(R.string.add_city)) },
         text = {
             Column {
-                Text("Enter city name:")
+                Text(stringResource(R.string.enter_city_name))
                 BasicTextField(
                     value = cityName,
-                    onValueChange = onCityNameChange,
+                    onValueChange = { newValue ->
+                        if (newValue.all { it.isLetter() || it.isWhitespace() }) {
+                            onCityNameChange(newValue)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    textStyle = LocalTextStyle.current.copy(
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Start
+                    )
                 )
+
             }
         },
         confirmButton = {
             Button(onClick = onAddCity) {
-                Text("Add")
+                Text(stringResource(R.string.add))
             }
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CitiesTopAppBar(onAddCityClick: () -> Unit) {
-    TopAppBar(
-        title = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Cities",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                IconButton(
-                    onClick = onAddCityClick,
-                    modifier = Modifier.align(Alignment.CenterEnd)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add City"
-                    )
-                }
-            }
-        },
-        navigationIcon = {}
-    )
-}
 
 @Composable
 fun CityListContent(
     cities: List<City>,
-    weatherState: WeatherViewModel.WeatherState,
-    selectedCity: City?,
-    setSelectedCity: (City) -> Unit,
-    navigationType: NavigationType,
-    viewModel: WeatherViewModel,
-    navController: NavHostController,
     paddingValues: PaddingValues,
+    setSelectedCity: (City?) -> Unit,
+    setHistoricalCity: (City?) -> Unit,
 ) {
     Column(
         Modifier
@@ -320,40 +244,14 @@ fun CityListContent(
             items(cities) { city ->
                 CityRow(
                     city = city,
-                    onCityClick = {
-                        viewModel.setNavigationType(NavigationType.DETAILS)
-                        setSelectedCity(city)
-                        viewModel.fetchWeather(city)
-                    },
-                    onInfoClick = {
-                        viewModel.setNavigationType(NavigationType.HISTORICAL)
-                        setSelectedCity(city)
-                        viewModel.fetchWeather(city)
-                    }
+                    onCityClick = { setSelectedCity(city) },
+                    onInfoClick = { setHistoricalCity(city) },
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        when (weatherState) {
-            is WeatherViewModel.WeatherState.Success -> {
-                val success = weatherState.viewState
-                LaunchedEffect(navigationType, selectedCity) {
-                    handleNavigation(
-                        navigationType = navigationType,
-                        success = success,
-                        navController = navController
-                    )
-                }
-            }
-
-            is WeatherViewModel.WeatherState.Error -> {
-                Text("Error: ${weatherState.message}")
-            }
-
-            else -> {}
-        }
     }
 }
 
@@ -412,71 +310,6 @@ fun handleNavigation(
         }
 
         else -> {}
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DetailsScreen(
-    description: String,
-    temperature: String,
-    humidity: String,
-    windSpeed: String,
-    iconUrl: String,
-    cityName: String,
-    timestamp: String,
-    navController: NavHostController,
-) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(cityName)
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Weather information for $cityName received on $timestamp",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            AsyncImage(
-                model = iconUrl,
-                contentDescription = "Weather Icon",
-                modifier = Modifier
-                    .size(100.dp),
-                contentScale = ContentScale.Crop
-
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text("Description: $description", style = MaterialTheme.typography.titleLarge)
-            Text("Temp: $temperature°C", style = MaterialTheme.typography.titleLarge)
-            Text("Humidity: $humidity%", style = MaterialTheme.typography.titleLarge)
-            Text("Wind: $windSpeed km/h", style = MaterialTheme.typography.titleLarge)
-        }
     }
 }
 

@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SimpleWeatherApp</string>
+    <string name="historical">%1$s Historical</string>
+    <string name="details">Details</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_city_name">Enter city name:</string>
+    <string name="add_city">Add City</string>
+
+    <string name="weather_information_for_received_on">Weather information for %1$s received on %2$s</string>
+    <string name="description">Description: %s</string>
+    <string name="temp_c">Temp: %s°C</string>
+    <string name="humidity">Humidity: %s%%</string>
+    <string name="wind_km_h">Wind: %s km/h</string>
+    <string name="back">Back</string>
+    <string name="weather_icon">Weather Icon</string>
 </resources>

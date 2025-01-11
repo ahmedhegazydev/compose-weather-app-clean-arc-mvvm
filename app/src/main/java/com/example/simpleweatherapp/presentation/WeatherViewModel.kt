@@ -1,19 +1,21 @@
-package com.example.simpleweatherapp.presentation
+package com.example.simpleweatherapp.presentation;
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.simpleweatherapp.data.NavigationType
-import com.example.simpleweatherapp.data.offline.City
-import com.example.simpleweatherapp.domain.AddCityUseCase
-import com.example.simpleweatherapp.domain.GetCitiesUseCase
-import com.example.simpleweatherapp.domain.GetWeatherUseCase
-import com.example.simpleweatherapp.domain.WeatherViewState
-import com.example.simpleweatherapp.domain.toViewState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.viewModelScope;
+import com.example.simpleweatherapp.Event;
+import com.example.simpleweatherapp.data.NavigationType;
+import com.example.simpleweatherapp.data.offline.City;
+import com.example.simpleweatherapp.domain.AddCityUseCase;
+import com.example.simpleweatherapp.domain.GetCitiesUseCase;
+import com.example.simpleweatherapp.domain.GetWeatherUseCase;
+import com.example.simpleweatherapp.domain.NavigationData;
+import com.example.simpleweatherapp.domain.WeatherViewState;
+import com.example.simpleweatherapp.domain.toViewState;
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import kotlinx.coroutines.flow.MutableStateFlow;
+import kotlinx.coroutines.flow.StateFlow;
+import kotlinx.coroutines.launch;
+import javax.inject.Inject;
 
 /**
  * ViewModel responsible for managing UI state and business logic for the weather app.
@@ -28,26 +30,45 @@ class WeatherViewModel @Inject constructor(
     private val addCityUseCase: AddCityUseCase,
 ) : ViewModel() {
 
-    // Navigation state management
-    private val _navigationType = MutableStateFlow<NavigationType>(NavigationType.NONE)
-    val navigationType: StateFlow<NavigationType> = _navigationType
+    private val _navigationEvent = MutableStateFlow<Event<NavigationData>?>(null);
+    val navigationEvent: StateFlow<Event<NavigationData>?> = _navigationEvent;
 
-    /**
-     * Updates the navigation type for the UI.
-     *
-     * @param type The new [NavigationType].
-     */
-    fun setNavigationType(type: NavigationType) {
-        _navigationType.value = type
+    fun navigateToDetails(city: City) {
+        viewModelScope.launch {
+            val result = fetchWeather(city)
+            if (result != null) {
+                val data = NavigationData(
+                    navigationType = NavigationType.DETAILS,
+                    viewState = result
+                );
+                _navigationEvent.value = Event(data)
+            } else {
+                handleError("Failed to navigate to details");
+            }
+        }
     }
 
-    // City management
-    private val _cities = MutableStateFlow<List<City>>(emptyList())
-    val cities: StateFlow<List<City>> = _cities
-    private val defaultCities = listOf("London", "Paris", "Vienna") // Default cities
+    fun navigateToHistorical(city: City) {
+        viewModelScope.launch {
+            val result = fetchWeather(city);
+            if (result != null) {
+                val data = NavigationData(
+                    navigationType = NavigationType.HISTORICAL,
+                    viewState = result
+                );
+                _navigationEvent.value = Event(data)
+            } else {
+                handleError("Failed to navigate to historical data");
+            }
+        }
+    }
+
+    private val _cities = MutableStateFlow<List<City>>(emptyList());
+    val cities: StateFlow<List<City>> = _cities;
+    private val defaultCities = listOf("London", "Paris", "Vienna");
 
     init {
-        loadCities()
+        loadCities();
     }
 
     /**
@@ -57,10 +78,9 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             getCitiesUseCase.execute().collect { cityList ->
                 if (cityList.isEmpty()) {
-                    addDefaultCities()
-//                    _cities.value = defaultCities.map { City(name = it) } // Update `_cities` with default cities
+                    addDefaultCities();
                 } else {
-                    _cities.value = cityList
+                    _cities.value = cityList;
                 }
             }
         }
@@ -72,8 +92,8 @@ class WeatherViewModel @Inject constructor(
     private fun addDefaultCities() {
         viewModelScope.launch {
             defaultCities.forEach { cityName ->
-                addCityUseCase.execute(City(name = cityName))
-            }
+                addCityUseCase.execute(City(name = cityName));
+            };
         }
     }
 
@@ -84,29 +104,32 @@ class WeatherViewModel @Inject constructor(
      */
     fun addCity(name: String) {
         viewModelScope.launch {
-            addCityUseCase.execute(City(name = name))
+            addCityUseCase.execute(City(name = name));
         }
     }
-
-    // Weather state management
-    private val _weatherState = MutableStateFlow<WeatherState>(WeatherState.Loading)
-    val weatherState: StateFlow<WeatherState> = _weatherState
 
     /**
      * Fetches weather data for a specified city.
      *
      * @param city The [City] for which weather data is fetched.
      */
-    fun fetchWeather(city: City) {
-        viewModelScope.launch {
-            try {
-                val weather = getWeatherUseCase(city.name)
-                val viewState = weather.toViewState()
-                _weatherState.value = WeatherState.Success(viewState)
-            } catch (e: Exception) {
-                _weatherState.value = WeatherState.Error(e.message ?: "Unknown Error")
-            }
+    suspend fun fetchWeather(city: City): WeatherViewState? {
+        return try {
+            val weather = getWeatherUseCase(city.name);
+            weather.toViewState();
+        } catch (e: Exception) {
+            handleError("Error fetching weather data: ${e.message}");
+            null
         }
+    }
+
+    /**
+     * Handles errors by logging or displaying a message.
+     *
+     * @param message The error message to handle.
+     */
+    private fun handleError(message: String) {
+        println(message);
     }
 
     /**
@@ -116,20 +139,20 @@ class WeatherViewModel @Inject constructor(
         /**
          * Represents a loading state where data is being fetched.
          */
-        object Loading : WeatherState()
+        object Loading : WeatherState();
 
         /**
          * Represents a successful data fetch, containing a [WeatherViewState].
          *
          * @param viewState The user-friendly representation of the weather data.
          */
-        data class Success(val viewState: WeatherViewState) : WeatherState()
+        data class Success(val viewState: WeatherViewState) : WeatherState();
 
         /**
          * Represents an error state with an associated error message.
          *
          * @param message A description of the error.
          */
-        data class Error(val message: String) : WeatherState()
+        data class Error(val message: String) : WeatherState();
     }
 }
