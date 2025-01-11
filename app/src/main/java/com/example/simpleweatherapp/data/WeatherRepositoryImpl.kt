@@ -1,0 +1,69 @@
+package com.example.simpleweatherapp.data
+
+import com.example.simpleweatherapp.BuildConfig
+import com.example.simpleweatherapp.data.offline.City
+import com.example.simpleweatherapp.data.offline.CityDao
+import com.example.simpleweatherapp.domain.CityRepository
+import com.example.simpleweatherapp.domain.Weather
+import com.example.simpleweatherapp.domain.WeatherRepository
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+
+/**
+ * Implementation of the [WeatherRepository] interface.
+ *
+ * This class provides weather data by fetching it from a remote API using [WeatherApiService].
+ *
+ * @property apiService The service interface for making API calls to retrieve weather data.
+ */
+class WeatherRepositoryImpl @Inject constructor(
+    private val apiService: WeatherApiService
+) : WeatherRepository {
+
+    /**
+     * Retrieves weather data for a given city.
+     *
+     * This method makes an API call to fetch the weather data for the specified city,
+     * using the API key from [API_KEY].
+     *
+     * @param city The name of the city to retrieve weather data for.
+     * @return A [Weather] object containing the weather details of the specified city.
+     * @throws Exception If the API call fails.
+     */
+    override suspend fun getWeather(city: String): Weather {
+        val response = apiService.getWeather(city, BuildConfig.API_KEY)
+        return response.toDomain()
+    }
+}
+
+/**
+ * Implementation of the [CityRepository] interface.
+ *
+ * This class provides methods for managing city data stored locally using [CityDao].
+ *
+ * @property cityDao The DAO interface for accessing and modifying city data in the local database.
+ */
+class CityRepositoryImpl @Inject constructor(
+    private val cityDao: CityDao
+) : CityRepository {
+
+    /**
+     * Retrieves a list of all cities stored in the local database.
+     *
+     * This method uses the [CityDao] to fetch the data and returns a reactive [Flow]
+     * that emits updates whenever the data changes.
+     *
+     * @return A [Flow] emitting a list of [City] objects.
+     */
+    override suspend fun getCities(): Flow<List<City>> = cityDao.getAllCities()
+
+    /**
+     * Adds a new city to the local database.
+     *
+     * This method inserts a new city into the `cities` table using [CityDao].
+     * If the city already exists, it is ignored due to the conflict strategy in the DAO.
+     *
+     * @param city The [City] object to be added.
+     */
+    override suspend fun addCity(city: City) = cityDao.insertCity(city)
+}
