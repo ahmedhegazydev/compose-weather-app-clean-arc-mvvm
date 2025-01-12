@@ -76,6 +76,8 @@ android {
 //        }
 //    }
 
+
+
 }
 
 val kotlinVersion = "1.9.10"
@@ -191,3 +193,8 @@ configurations.all {
         force("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0")
     }
 }
+
+//tasks.withType<Test> {
+//    useJUnitPlatform()
+//    jvmArgs = (jvmArgs ?: mutableListOf()) + "-Djdk.module.illegalAccess.silent=true" // Safely initialize
+//}
