@@ -17,7 +17,7 @@ import com.google.gson.Gson
  * This class prevents the content from being handled multiple times by keeping
  * track of whether it has been accessed or not.
  */
-class Event<out T>(private val content: T) {
+class SingleEvent<out T>(private val content: T) {
 
     // Flag to check if the event has been handled.
     private var hasBeenHandled = false;

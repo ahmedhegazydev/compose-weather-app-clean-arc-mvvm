@@ -49,6 +49,33 @@ android {
         buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org\"")
     }
 
+
+    packaging {
+        resources {
+            excludes.addAll(
+                listOf(
+                    "META-INF/LICENSE.md",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/NOTICE.md",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/LICENSE-notice.md",
+
+                    )
+            )
+        }
+    }
+
+//    testOptions {
+//        unitTests.all {
+//            packagingOptions {
+//                exclude("META-INF/LICENSE.md")
+//                exclude("META-INF/LICENSE.txt")
+//                exclude("META-INF/NOTICE.md")
+//                exclude("META-INF/NOTICE.txt")
+//            }
+//        }
+//    }
+
 }
 
 val kotlinVersion = "1.9.10"
@@ -67,10 +94,12 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.core.testing)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -120,12 +149,41 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.slf4j.simple)
 
+    testImplementation( libs.mockwebserver)
+    testImplementation(  libs.androidx.room.testing)
+    testImplementation(  libs.androidx.core.testing)
+
+    androidTestImplementation (libs.hilt.android.testing)
+    androidTestImplementation (libs.mockwebserver)
+
+    testImplementation(  libs.mockito.inline)
+
+
+    // For Compose Testing
+    androidTestImplementation (libs.ui.test.junit4)
+    debugImplementation (libs.ui.tooling)
+    debugImplementation (libs.ui.test.manifest)
+
+    implementation(libs.kotlin.reflect)
+
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation (libs.mockk.android)
+
+
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.2") {
+        exclude(group = "META-INF", module = "LICENSE.md")
+    }
+
+    kaptAndroidTest(libs.hilt.android.compiler)
+    kaptAndroidTest(libs.androidx.room.compiler)
+
 
 }
 
 kapt {
     correctErrorTypes = true
-
+    useBuildCache = false
+    showProcessorStats = true
 }
 
 configurations.all {

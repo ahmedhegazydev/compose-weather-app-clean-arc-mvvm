@@ -164,5 +164,8 @@ fun Weather.toViewState(): WeatherViewState {
  */
 data class NavigationData(
     val navigationType: NavigationType,
-    val viewState: WeatherViewState? = null
+    val viewState: WeatherViewState?,
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
 )
+
