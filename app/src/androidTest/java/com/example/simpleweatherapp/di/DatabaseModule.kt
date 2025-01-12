@@ -1,17 +1,8 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.di
 
-import android.content.Context
-import androidx.room.Room
 import com.example.simpleweatherapp.data.offline.AppDatabase
 import com.example.simpleweatherapp.data.offline.CityDao
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.simpleweatherapp.data.offline.City
 import dagger.hilt.android.testing.HiltAndroidRule

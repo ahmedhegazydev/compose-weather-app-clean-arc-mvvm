@@ -1,20 +1,6 @@
-package com.example.simpleweatherapp
-
-import com.example.simpleweatherapp.BuildConfig
-import com.example.simpleweatherapp.data.WeatherApiService
-import com.example.simpleweatherapp.data.offline.City
-import com.example.simpleweatherapp.data.offline.CityDao
-import com.example.simpleweatherapp.data.toDomain
-import com.example.simpleweatherapp.domain.CityRepository
-import com.example.simpleweatherapp.domain.Weather
-import com.example.simpleweatherapp.domain.WeatherRepository
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+package com.example.simpleweatherapp.data
 
 
-import com.example.simpleweatherapp.data.WeatherDto
-import com.example.simpleweatherapp.data.WeatherRepositoryImpl
-import com.example.simpleweatherapp.data.toDomain
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse

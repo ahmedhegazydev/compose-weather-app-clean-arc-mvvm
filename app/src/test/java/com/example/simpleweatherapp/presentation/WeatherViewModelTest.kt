@@ -1,4 +1,4 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.presentation
 
 import app.cash.turbine.test
 import com.example.simpleweatherapp.data.NavigationType
@@ -8,7 +8,6 @@ import com.example.simpleweatherapp.domain.AddCityUseCase
 import com.example.simpleweatherapp.domain.GetCitiesUseCase
 import com.example.simpleweatherapp.domain.GetWeatherUseCase
 import com.example.simpleweatherapp.domain.WeatherViewState
-import com.example.simpleweatherapp.presentation.WeatherViewModel
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

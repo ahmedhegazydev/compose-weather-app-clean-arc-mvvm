@@ -1,15 +1,9 @@
-package com.example.simpleweatherapp
-
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+package com.example.simpleweatherapp.data.offline
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.simpleweatherapp.data.offline.AppDatabase
-import com.example.simpleweatherapp.data.offline.City
-import com.example.simpleweatherapp.data.offline.CityDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After

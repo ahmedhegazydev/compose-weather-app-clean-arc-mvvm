@@ -1,13 +1,9 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.presentation
 
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.simpleweatherapp.R
-import com.example.simpleweatherapp.presentation.MainActivity
-import com.example.simpleweatherapp.presentation.WeatherApp
-import com.example.simpleweatherapp.presentation.WeatherViewModel
 import com.example.simpleweatherapp.ui.theme.SimpleWeatherAppTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

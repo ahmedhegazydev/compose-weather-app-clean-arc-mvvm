@@ -1,11 +1,8 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.presentation
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.example.simpleweatherapp.domain.WeatherDescription
 import com.example.simpleweatherapp.domain.WeatherViewState
-import com.example.simpleweatherapp.presentation.HistoricalWeatherItem
-import com.example.simpleweatherapp.presentation.HistoricalWeatherScreen
 import org.junit.Rule
 import org.junit.Test
 

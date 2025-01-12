@@ -1,5 +1,6 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.di
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.simpleweatherapp.data.WeatherApiService
 import com.example.simpleweatherapp.data.WeatherRepositoryImpl
 import com.example.simpleweatherapp.data.offline.CityDao
@@ -17,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 @HiltAndroidTest
-@RunWith(androidx.test.ext.junit.runners.AndroidJUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class RepositoryModuleTest {
 
     @get:Rule

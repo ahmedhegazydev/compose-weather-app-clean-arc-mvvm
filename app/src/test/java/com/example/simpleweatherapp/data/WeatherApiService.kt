@@ -1,6 +1,5 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.data
 
-import com.example.simpleweatherapp.data.WeatherApiService
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

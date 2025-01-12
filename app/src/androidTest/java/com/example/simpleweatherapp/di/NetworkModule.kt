@@ -1,5 +1,6 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.di
 
+import com.example.simpleweatherapp.BuildConfig
 import com.example.simpleweatherapp.data.WeatherApiService
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

@@ -1,14 +1,5 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.data
 
-import com.example.simpleweatherapp.data.CloudsDto
-import com.example.simpleweatherapp.data.MainDto
-import com.example.simpleweatherapp.data.SysDto
-import com.example.simpleweatherapp.data.WeatherDescDto
-import com.example.simpleweatherapp.data.WeatherDto
-import com.example.simpleweatherapp.data.WindDto
-import com.example.simpleweatherapp.domain.*
-import com.example.simpleweatherapp.data.*
-import com.example.simpleweatherapp.domain.*
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

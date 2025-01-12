@@ -1,4 +1,4 @@
-package com.example.simpleweatherapp
+package com.example.simpleweatherapp.presentation
 
 
 import androidx.compose.ui.test.*
@@ -9,11 +9,6 @@ import com.example.simpleweatherapp.data.NavigationType
 import com.example.simpleweatherapp.data.offline.City
 import com.example.simpleweatherapp.domain.NavigationData
 import com.example.simpleweatherapp.domain.WeatherViewState
-import com.example.simpleweatherapp.presentation.MainActivity
-import com.example.simpleweatherapp.presentation.SingleEvent
-import com.example.simpleweatherapp.presentation.WeatherApp
-import com.example.simpleweatherapp.presentation.WeatherViewModel
-import dagger.hilt.android.testing.CustomTestApplication
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.every
