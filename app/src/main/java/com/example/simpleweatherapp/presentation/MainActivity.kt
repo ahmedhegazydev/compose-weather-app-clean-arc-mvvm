@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // Enable edge-to-edge rendering for a more immersive UI experience.
-//        enableEdgeToEdge()
+        enableEdgeToEdge()
 
         // Set the content view using Jetpack Compose.
         setContent {

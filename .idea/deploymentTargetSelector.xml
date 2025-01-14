@@ -5,16 +5,16 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HistoricalWeatherScreenTest">
+      <SelectionState runConfigName="PresentationTests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MainActivityTest">
+      <SelectionState runConfigName="testHandleNavigationNavigatesToDetailsRoute()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="WeatherAppTest">
+      <SelectionState runConfigName="testGetWeatherDetailsExtractsArgumentsCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="CityDaoTest">
+      <SelectionState runConfigName="testHandleNavigationNavigatesToHistoricalRoute()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
