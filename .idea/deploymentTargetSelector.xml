@@ -11,10 +11,13 @@
       <SelectionState runConfigName="testHandleNavigationNavigatesToDetailsRoute()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testGetWeatherDetailsExtractsArgumentsCorrectly()">
+      <SelectionState runConfigName="testHandleNavigationNavigatesToHistoricalRoute()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testHandleNavigationNavigatesToHistoricalRoute()">
+      <SelectionState runConfigName="AppDatabaseTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="retrieveAllCities()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
