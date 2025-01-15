@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
  * with the Room database.
  */
 @RunWith(AndroidJUnit4::class)
-@SmallTest
+//@SmallTest
 class CityEntityTest {
 
     private lateinit var database: AppDatabase
@@ -29,7 +29,11 @@ class CityEntityTest {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java
-        ).allowMainThreadQueries().build()
+        )
+//            .fallbackToDestructiveMigrationOnDowngrade()
+//            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
 
         dao = database.cityDao()
     }
