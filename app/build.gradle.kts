@@ -19,7 +19,9 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner  = "com.example.simpleweatherapp.di.CustomTestRunner"
+
     }
 
     buildTypes {
@@ -49,6 +51,11 @@ android {
         buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org\"")
     }
 
+    composeOptions {
+        composeOptions {
+            kotlinCompilerExtensionVersion = "1.5.15"
+        }
+    }
 
     packaging {
         resources {

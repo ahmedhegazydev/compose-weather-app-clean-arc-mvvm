@@ -11,8 +11,10 @@ import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.simpleweatherapp.R
+import com.example.simpleweatherapp.domain.WeatherDescription
 import com.example.simpleweatherapp.domain.WeatherViewState
 
 /**
@@ -68,6 +70,40 @@ fun HistoricalWeatherScreen(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewHistoricalWeatherScreen() {
+    HistoricalWeatherScreen(
+        weather = WeatherViewState(
+            description = "Clear skies",
+            temperature = "25°C",
+            humidity = "50%",
+            windSpeed = "10 km/h",
+            iconUrl = "",
+            cityName = "Cairo",
+            timestamp = "2023-01-01 10:00",
+            location = "Egypt",
+            weathers = listOf(
+                WeatherDescription(
+                    id = 800,
+                    main = "Clear",
+                    description = "Clear sky",
+                    icon = "01d"
+                ),
+                WeatherDescription(
+                    id = 800,
+                    main = "Clear",
+                    description = "Clear sky",
+                    icon = "01d"
+                )
+            )
+        ),
+        cityName = "Cairo",
+        onDismiss = {}
+    )
+}
+
 
 /**
  * A composable function to display an individual historical weather item.

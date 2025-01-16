@@ -1,43 +1,52 @@
 package com.example.simpleweatherapp.presentation
 
+import android.content.Context
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.core.app.ApplicationProvider
 import com.example.simpleweatherapp.domain.WeatherViewState
 import org.junit.Rule
 import org.junit.Test
+import com.example.simpleweatherapp.R
+import com.example.simpleweatherapp.domain.WeatherDescription
 
 class HistoricalWeatherScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-//    @Test
-//    fun displaysCityNameInTopAppBar() {
-//        val cityName = "Cairo"
-//        val weatherViewState = WeatherViewState(
-//            description = "",
-//            temperature = "",
-//            humidity = "",
-//            windSpeed = "",
-//            iconUrl = "",
-//            cityName = cityName,
-//            timestamp = "",
-//            location = "",
-//            weathers = emptyList()
-//        )
-//
-//        composeTestRule.setContent {
-//            HistoricalWeatherScreen(
-//                weather = weatherViewState,
-//                cityName = cityName,
-//                onDismiss = {}
-//            )
-//        }
-//
-//        composeTestRule
-//            .onNodeWithText("Historical Weather for $cityName")
-//            .assertIsDisplayed()
-//    }
+    @Test
+    fun displaysCityNameInTopAppBar() {
+        val cityName = "Cairo"
+        val weatherViewState = WeatherViewState(
+            description = "",
+            temperature = "",
+            humidity = "",
+            windSpeed = "",
+            iconUrl = "",
+            cityName = cityName,
+            timestamp = "",
+            location = "",
+            weathers = emptyList()
+        )
+
+        composeTestRule.setContent {
+            HistoricalWeatherScreen(
+                weather = weatherViewState,
+                cityName = cityName,
+                onDismiss = {}
+            )
+        }
+
+        // Resolve the string resource with the city name
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val expectedTitle = context.getString(R.string.historical, cityName)
+
+        // Assert that the expected title is displayed
+        composeTestRule.onNodeWithText(expectedTitle)
+            .assertIsDisplayed()
+    }
 
     @Test
     fun callsOnDismissWhenDoneButtonClicked() {

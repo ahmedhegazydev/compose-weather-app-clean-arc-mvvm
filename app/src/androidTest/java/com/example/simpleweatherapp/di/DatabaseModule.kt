@@ -4,7 +4,9 @@ import com.example.simpleweatherapp.data.offline.AppDatabase
 import com.example.simpleweatherapp.data.offline.CityDao
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.simpleweatherapp.MyApp
 import com.example.simpleweatherapp.data.offline.City
+import dagger.hilt.android.testing.CustomTestApplication
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -63,12 +65,16 @@ class DatabaseModuleTest {
 
     @Test
     fun testCityDaoReturnsEmptyInitially() = runBlocking {
+        // Clear database
+        db.clearAllTables()
+
         // When
         val cities = cityDao.getAllCities().first()
 
         // Then
-        assertEquals(0, cities.size)
+        assertEquals(0, cities.size) // Assert that the database is empty
     }
+
 
     @Test
     fun testCityDaoIgnoresDuplicateInsert() = runBlocking {
@@ -84,3 +90,5 @@ class DatabaseModuleTest {
         assertEquals(1, cities.size) // Duplicate should not be added
     }
 }
+
+
