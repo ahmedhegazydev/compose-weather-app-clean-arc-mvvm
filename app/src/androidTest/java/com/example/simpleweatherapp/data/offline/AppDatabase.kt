@@ -53,7 +53,7 @@ class AppDatabaseTest {
     @Test
     fun insertCityAndRetrieveByName() = runBlocking {
         val city = City(id = 1, name = "Cairo")
-        cityDao.insertCity(city)
+        cityDao.insertCity(listOf(city))
 
         val retrievedCity = cityDao.getCityByName("Cairo")
         assertEquals(city, retrievedCity)
@@ -65,7 +65,7 @@ class AppDatabaseTest {
     @Test
     fun deleteCityRemovesItFromDatabase() = runBlocking {
         val city = City(id = 2, name = "Alexandria")
-        cityDao.insertCity(city)
+        cityDao.insertCity(listOf(city))
 
         cityDao.deleteCity(city)
         val retrievedCity = cityDao.getCityByName("Alexandria")
@@ -79,8 +79,8 @@ class AppDatabaseTest {
     fun retrieveAllCities() = runBlocking {
         val city1 = City(id = 1, name = "Cairo")
         val city2 = City(id = 2, name = "Alexandria")
-        cityDao.insertCity(city1)
-        cityDao.insertCity(city2)
+
+        cityDao.insertCity(listOf(city1, city2))
 
         val cities = cityDao.getAllCities().toList() // Collect the Flow into a list
         assertEquals(listOf(city1, city2), cities)
@@ -92,7 +92,7 @@ class AppDatabaseTest {
     @Test
     fun updateCityUpdatesData() = runBlocking {
         val city = City(id = 1, name = "Cairo")
-        cityDao.insertCity(city)
+        cityDao.insertCity(listOf(city))
 
         val updatedCity = City(id = 1, name = "New Cairo")
         cityDao.updateCity(updatedCity)

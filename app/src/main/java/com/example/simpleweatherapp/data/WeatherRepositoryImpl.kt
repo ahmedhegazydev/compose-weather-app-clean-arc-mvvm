@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @property apiService The service interface for making API calls to retrieve weather data.
  */
 class WeatherRepositoryImpl @Inject constructor(
-    private val apiService: WeatherApiService
+    private val apiService: WeatherApiService,
 ) : WeatherRepository {
 
     /**
@@ -44,7 +44,7 @@ class WeatherRepositoryImpl @Inject constructor(
  * @property cityDao The DAO interface for accessing and modifying city data in the local database.
  */
 class CityRepositoryImpl @Inject constructor(
-    private val cityDao: CityDao
+    private val cityDao: CityDao,
 ) : CityRepository {
 
     /**
@@ -55,7 +55,7 @@ class CityRepositoryImpl @Inject constructor(
      *
      * @return A [Flow] emitting a list of [City] objects.
      */
-    override suspend fun getCities(): Flow<List<City>> = cityDao.getAllCities()
+    override fun getCities(): Flow<List<City>> = cityDao.getAllCities()
 
     /**
      * Adds a new city to the local database.
@@ -65,5 +65,27 @@ class CityRepositoryImpl @Inject constructor(
      *
      * @param city The [City] object to be added.
      */
-    override suspend fun addCity(city: City) = cityDao.insertCity(city)
+    override suspend fun addCity(city: List<City>) = cityDao.insertCity(city)
+//    override suspend fun addCity(cityList: List<City>) {
+//        if (cityList.isEmpty()) {
+//            throw IllegalArgumentException("City list cannot be empty")
+//        }
+//
+//        val uniqueCities = cityList.distinctBy { it.name } // Remove duplicates by name
+//        if (uniqueCities.isEmpty()) {
+//            throw IllegalArgumentException("City list contains only duplicates")
+//        }
+//
+//        // Batch processing
+////        Performance:
+////        Reduces the load on the database by breaking large transactions into smaller, manageable chunks.
+////        Prevents long transaction times and potential database locks.
+//        uniqueCities.chunked(100).forEach { batch ->
+//            cityDao.insertCity(batch)
+//        }
+//    }
+
+
 }
+
+

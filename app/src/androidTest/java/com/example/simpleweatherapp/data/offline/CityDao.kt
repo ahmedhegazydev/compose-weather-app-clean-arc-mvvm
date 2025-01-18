@@ -64,7 +64,7 @@ class CityDaoTest {
         val city = City(id = 1, name = "London")
 
         // When: The city is inserted and all cities are retrieved
-        dao.insertCity(city)
+        dao.insertCity(listOf(city))
         val cities = dao.getAllCities().first() // Collect the first emission from the Flow
 
         // Then: Verify the retrieved data matches the inserted data
@@ -81,8 +81,8 @@ class CityDaoTest {
         val city = City(id = 1, name = "London")
 
         // When: The same city is inserted twice
-        dao.insertCity(city)
-        dao.insertCity(city) // Insert the duplicate
+        dao.insertCity(listOf(city, city))
+
         val cities = dao.getAllCities().first()
 
         // Then: Verify that only one instance of the city exists

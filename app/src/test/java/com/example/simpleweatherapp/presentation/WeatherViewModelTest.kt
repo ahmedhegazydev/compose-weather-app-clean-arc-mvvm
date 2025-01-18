@@ -126,9 +126,13 @@ class WeatherViewModelTest {
             val emittedCities = awaitItem()
             assertTrue(emittedCities.isEmpty())
 
-            verify(addCityUseCase).execute(City(name = "London"))
-            verify(addCityUseCase).execute(City(name = "Paris"))
-            verify(addCityUseCase).execute(City(name = "Vienna"))
+            verify(addCityUseCase).execute(
+                listOf(
+                    City(name = "London"),
+                    City(name = "Paris"),
+                    City(name = "Vienna"),
+                )
+            )
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -159,7 +163,7 @@ class WeatherViewModelTest {
 
         viewModel.addCity(cityName)
 
-        verify(addCityUseCase).execute(City(name = cityName))
+        verify(addCityUseCase).execute(listOf(City(name = cityName)))
     }
 }
 

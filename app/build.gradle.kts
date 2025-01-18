@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 
 }
 
@@ -19,7 +19,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner  = "com.example.simpleweatherapp.di.CustomTestRunner"
 
     }
@@ -72,24 +71,9 @@ android {
         }
     }
 
-//    testOptions {
-//        unitTests.all {
-//            packagingOptions {
-//                exclude("META-INF/LICENSE.md")
-//                exclude("META-INF/LICENSE.txt")
-//                exclude("META-INF/NOTICE.md")
-//                exclude("META-INF/NOTICE.txt")
-//            }
-//        }
-//    }
-
 
 
 }
-
-val kotlinVersion = "1.9.10"
-val roomVersion = "2.6.1"
-val hiltVersion = "2.55"
 
 
 dependencies {
@@ -101,7 +85,11 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+
     implementation(libs.androidx.material3)
+//    implementation(libs.androidx.material)
+
+
     testImplementation(libs.junit)
     testImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.junit)
@@ -112,13 +100,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
-    // Jetpack Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
 
     // Retrofit for API
     implementation(libs.retrofit)
@@ -132,23 +113,23 @@ dependencies {
     implementation( libs.androidx.navigation.compose)
     implementation( libs.coil.compose)
 
-    implementation( "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0")
+    implementation( libs.kotlinx.metadata.jvm)
 
     // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    implementation(libs.kotlin.stdlib.v1910)
 
     // Room
-    implementation("androidx.room:room-runtime:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation(libs.hilt.android.v255)
+    ksp(libs.hilt.compiler)
 
     implementation( libs.glide )
     implementation( libs.ui)
-    kapt("com.github.bumptech.glide:compiler:4.15.1")
+    ksp(libs.compiler)
 
 
     testImplementation(libs.kotlinx.coroutines.test)
@@ -183,25 +164,13 @@ dependencies {
         exclude(group = "META-INF", module = "LICENSE.md")
     }
 
-    kaptAndroidTest(libs.hilt.android.compiler)
-    kaptAndroidTest(libs.androidx.room.compiler)
-
 
 }
 
-kapt {
-    correctErrorTypes = true
-    useBuildCache = false
-    showProcessorStats = true
-}
 
 configurations.all {
     resolutionStrategy {
-        force("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0")
+        force("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
     }
 }
 
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//    jvmArgs = (jvmArgs ?: mutableListOf()) + "-Djdk.module.illegalAccess.silent=true" // Safely initialize
-//}

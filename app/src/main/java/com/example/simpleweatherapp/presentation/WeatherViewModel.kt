@@ -11,9 +11,11 @@ import com.example.simpleweatherapp.domain.NavigationData
 import com.example.simpleweatherapp.domain.WeatherViewState
 import com.example.simpleweatherapp.domain.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import javax.inject.Inject
 
 /**
@@ -97,10 +99,10 @@ class WeatherViewModel @Inject constructor(
      * If the list is empty, adds the default cities.
      */
     private fun loadCities() {
-        viewModelScope.launch {
+        viewModelScope.launch (Dispatchers.IO){
             getCitiesUseCase.execute().collect { cityList ->
                 if (cityList.isEmpty()) {
-                    addDefaultCities()
+                    addCityUseCase.execute(defaultCities.map { City(name = it)  })
                 } else {
                     _cities.value = cityList
                 }
@@ -108,17 +110,6 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Adds the default cities to the data source.
-     * This is invoked when no cities are found in the data source.
-     */
-    private fun addDefaultCities() {
-        viewModelScope.launch {
-            defaultCities.forEach { cityName ->
-                addCityUseCase.execute(City(name = cityName))
-            }
-        }
-    }
 
     /**
      * Adds a new city to the data source.
@@ -127,41 +118,11 @@ class WeatherViewModel @Inject constructor(
      */
     fun addCity(name: String) {
         viewModelScope.launch {
-            addCityUseCase.execute(City(name = name))
+            addCityUseCase.execute(listOf(City(name = name)))
         }
     }
 
-    /**
-     * Fetches weather data for a specific city.
-     *
-     * @param city The [City] for which weather data is fetched.
-     * @return The weather data in a user-friendly [WeatherViewState] format, or null if an error occurs.
-     */
-    suspend fun fetchWeather(city: City): WeatherViewState? {
-        return try {
-            val weather = getWeatherUseCase(city.name)
-            weather.toViewState()
-        } catch (e: Exception) {
-            handleError("Error fetching weather data: ${e.message}")
-            null
-        }
-    }
 
-    /**
-     * Handles and logs errors that occur during data operations.
-     *
-     * @param message A descriptive error message.
-     * @param throwable An optional [Throwable] representing the cause of the error.
-     */
-    private fun handleError(message: String, throwable: Throwable? = null) {
-        val errorType = when (throwable) {
-            is java.net.UnknownHostException -> "Network Error: Please check your internet connection."
-            is java.net.SocketTimeoutException -> "Request Timed Out: Try again later."
-            else -> message
-        }
-        println("Error: $errorType")
-        throwable?.printStackTrace() // Log detailed stack trace if needed
-    }
 
     /**
      * Represents the navigation state for the app.

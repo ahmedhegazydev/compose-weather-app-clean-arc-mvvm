@@ -50,7 +50,7 @@ class CityEntityTest {
         val city = City(name = "New York")
 
         // When
-        dao.insertCity(city)
+        dao.insertCity(listOf(city))
         val cities = dao.getAllCities().first()
 
         // Then
@@ -65,8 +65,8 @@ class CityEntityTest {
         val city2 = City(name = "Berlin")
 
         // When
-        dao.insertCity(city1)
-        dao.insertCity(city2)
+        dao.insertCity(listOf(city1, city2))
+
         val cities = dao.getAllCities().first()
 
         // Then
@@ -81,7 +81,8 @@ class CityEntityTest {
         val city = City(name = "Tokyo")
 
         // When
-        dao.insertCity(city)
+        dao.insertCity(listOf(city))
+
         val cities = dao.getAllCities().first()
 
         // Then

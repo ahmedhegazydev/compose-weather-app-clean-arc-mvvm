@@ -55,7 +55,8 @@ class DatabaseModuleTest {
         val city = City(name = "Paris")
 
         // When
-        cityDao.insertCity(city)
+        cityDao.insertCity(listOf(city))
+
         val cities = cityDao.getAllCities().first()
 
         // Then
@@ -82,8 +83,8 @@ class DatabaseModuleTest {
         val city = City(name = "London")
 
         // When
-        cityDao.insertCity(city)
-        cityDao.insertCity(city) // Insert duplicate
+        cityDao.insertCity(listOf(city, city))
+
         val cities = cityDao.getAllCities().first()
 
         // Then

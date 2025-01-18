@@ -31,12 +31,12 @@ interface CityRepository {
      *
      * @return A [Flow] emitting a list of [City] objects representing the saved cities.
      */
-    suspend fun getCities(): Flow<List<City>>
+     fun getCities(): Flow<List<City>>
 
     /**
      * Adds a new city to the data source.
      *
      * @param city The [City] object to be added.
      */
-    suspend fun addCity(city: City)
+    suspend fun addCity(city: List<City>)
 }

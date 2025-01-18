@@ -38,7 +38,7 @@ interface CityDao {
      * @param city The [City] object to be inserted into the database.
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCity(city: City)
+    suspend fun insertCity(city: List<City>)
 
 
     /**

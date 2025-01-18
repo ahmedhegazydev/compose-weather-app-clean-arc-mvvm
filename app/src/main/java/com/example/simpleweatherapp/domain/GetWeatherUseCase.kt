@@ -34,7 +34,7 @@ class GetCitiesUseCase @Inject constructor(private val repository: CityRepositor
      *
      * @return A [Flow] emitting a list of [City] objects.
      */
-    suspend fun execute(): Flow<List<City>> = repository.getCities()
+     fun execute(): Flow<List<City>> = repository.getCities()
 }
 
 /**
@@ -48,5 +48,5 @@ class AddCityUseCase @Inject constructor(private val repository: CityRepository)
      *
      * @param city The [City] object to be added to the database.
      */
-    suspend fun execute(city: City) = repository.addCity(city)
+    suspend fun execute(city: List<City>) = repository.addCity(city)
 }

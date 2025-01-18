@@ -64,7 +64,7 @@ class CityRepositoryImplTest {
         val city = City(name = "New York")
 
         // When: The city is added and retrieved
-        cityRepository.addCity(city)
+        cityRepository.addCity(listOf(city))
         val cities = cityRepository.getCities().first()
 
         // Then: Verify that the city is added and retrieved correctly
@@ -93,8 +93,8 @@ class CityRepositoryImplTest {
         val city = City(name = "Los Angeles")
 
         // When: The same city is added twice
-        cityRepository.addCity(city)
-        cityRepository.addCity(city) // Add duplicate
+        cityRepository.addCity(listOf(city, city))
+
         val cities = cityRepository.getCities().first()
 
         // Then: Verify that duplicates are ignored
