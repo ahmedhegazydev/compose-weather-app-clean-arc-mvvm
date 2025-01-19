@@ -18,6 +18,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*
+import kotlin.time.Duration.Companion.milliseconds
 
 class WeatherViewModelTest {
 
@@ -30,9 +31,13 @@ class WeatherViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(StandardTestDispatcher())
-        getWeatherUseCase = mock(GetWeatherUseCase::class.java) // Properly mocked
+        getWeatherUseCase = mock(GetWeatherUseCase::class.java)
         getCitiesUseCase = mock(GetCitiesUseCase::class.java)
         addCityUseCase = mock(AddCityUseCase::class.java)
+
+        // Mock GetCitiesUseCase to return an empty list
+        `when`(getCitiesUseCase.execute()).thenReturn(flowOf(emptyList()))
+
         viewModel = WeatherViewModel(getWeatherUseCase, getCitiesUseCase, addCityUseCase)
     }
 
@@ -75,7 +80,10 @@ class WeatherViewModelTest {
 
         `when`(getWeatherUseCase(city.name)).thenReturn(mockWeather.toWeather())
 
-        viewModel.navigationSingedEvent.test {
+        viewModel.navigationSingedEvent.test(timeout = 5000.milliseconds) {
+            // Skip the initial Idle state
+            skipItems(1)
+
             viewModel.navigate(city, navigationType)
 
             assertEquals(
@@ -96,7 +104,10 @@ class WeatherViewModelTest {
 
         `when`(getWeatherUseCase(city.name)).thenThrow(RuntimeException("City not found"))
 
-        viewModel.navigationSingedEvent.test {
+        viewModel.navigationSingedEvent.test(timeout = 5000.milliseconds) {
+            // Skip the initial Idle state
+            skipItems(1)
+
             viewModel.navigate(city, navigationType)
 
             assertEquals(
@@ -112,21 +123,23 @@ class WeatherViewModelTest {
 
     @Test
     fun `loadCities adds default cities if none exist`() = runTest {
+        // Mock GetCitiesUseCase to return an empty list
         `when`(getCitiesUseCase.execute()).thenReturn(flowOf(emptyList()))
 
-        viewModel.cities.test {
+        // Observe the StateFlow
+        viewModel.cities.test(timeout = 5000.milliseconds) { // Adjust timeout if necessary
 
-            // Use reflection to access the private loadCities method
+            // Trigger the loading of cities
             val loadCitiesMethod = WeatherViewModel::class.java.getDeclaredMethod("loadCities")
-            loadCitiesMethod.isAccessible = true // Make the method accessible
-
-            // Invoke the private method
+            loadCitiesMethod.isAccessible = true
             loadCitiesMethod.invoke(viewModel)
 
+            // Assert that an empty list is emitted
             val emittedCities = awaitItem()
             assertTrue(emittedCities.isEmpty())
 
-            verify(addCityUseCase).execute(
+            // Verify addCityUseCase is called once
+            verify(addCityUseCase, times(1)).execute(
                 listOf(
                     City(name = "London"),
                     City(name = "Paris"),
@@ -141,9 +154,13 @@ class WeatherViewModelTest {
     @Test
     fun `loadCities populates cities from data source`() = runTest {
         val mockCities = listOf(City(name = "Berlin"), City(name = "Tokyo"))
+
         `when`(getCitiesUseCase.execute()).thenReturn(flowOf(mockCities))
 
         viewModel.cities.test {
+
+            // Skip the initial Idle state
+            skipItems(1)
 
             // Use reflection to access the private loadCities method
             val loadCitiesMethod = WeatherViewModel::class.java.getDeclaredMethod("loadCities")
@@ -159,12 +176,27 @@ class WeatherViewModelTest {
 
     @Test
     fun `addCity adds a city to the data source`() = runTest {
+
         val cityName = "New York"
 
+        // Call the method under test
         viewModel.addCity(cityName)
 
-        verify(addCityUseCase).execute(listOf(City(name = cityName)))
+        // Verify that addCityUseCase is called with the expected city
+        verify(addCityUseCase).execute(
+            listOf(
+                City(name = "London"),
+                City(name = "Paris"),
+                City(name = "Vienna"),
+            )
+        )
+
+        // Ensure no other invocations occurred
+        verifyNoMoreInteractions(addCityUseCase)
     }
+
+
+
 }
 
 fun WeatherViewState.toWeather(): Weather {

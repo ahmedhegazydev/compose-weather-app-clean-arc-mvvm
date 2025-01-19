@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 import javax.inject.Inject
@@ -38,7 +39,7 @@ class WeatherViewModel @Inject constructor(
      * Single-event flow to handle navigation events in the app.
      * It emits a [NavigationState] wrapped in [SingleEvent] to ensure the event is consumed only once.
      */
-    private val _navigationSingedEvent = MutableStateFlow<SingleEvent<NavigationState>?>(null)
+    private val _navigationSingedEvent = MutableStateFlow<SingleEvent<NavigationState>?>(SingleEvent(NavigationState.Idle))
     val navigationSingedEvent: StateFlow<SingleEvent<NavigationState>?> = _navigationSingedEvent
 
     /**
@@ -99,8 +100,10 @@ class WeatherViewModel @Inject constructor(
      * If the list is empty, adds the default cities.
      */
     private fun loadCities() {
-        viewModelScope.launch (Dispatchers.IO){
-            getCitiesUseCase.execute().collect { cityList ->
+        viewModelScope.launch{
+            getCitiesUseCase.execute()
+                .take(1) // Ensures only the first emission is processed
+                .collect { cityList ->
                 if (cityList.isEmpty()) {
                     addCityUseCase.execute(defaultCities.map { City(name = it)  })
                 } else {

@@ -165,6 +165,9 @@ dependencies {
     }
 
 
+    testImplementation (libs.byte.buddy)
+
+
 }
 
 
@@ -174,3 +177,8 @@ configurations.all {
     }
 }
 
+
+
+tasks.withType<Test> {
+    jvmArgs = (jvmArgs ?: mutableListOf()) + "-Dnet.bytebuddy.experimental=true"
+}
