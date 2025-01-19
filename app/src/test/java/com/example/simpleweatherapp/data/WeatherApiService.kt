@@ -115,16 +115,16 @@ class WeatherApiServiceTest {
         assertEquals(3.6, weather?.wind?.speed)
         assertEquals(90, weather?.wind?.deg)
         assertEquals(0, weather?.clouds?.all)
-        assertEquals(1692658355, weather?.timestamp)
+        assertEquals(1692658355L, weather?.timestamp)
         assertEquals("GB", weather?.systemInfo?.country)
         assertEquals(1, weather?.systemInfo?.type)
         assertEquals(1414, weather?.systemInfo?.id)
-        assertEquals(1692612800, weather?.systemInfo?.sunrise)
+        assertEquals(1692612800L, weather?.systemInfo?.sunrise)
         assertEquals("GB", weather?.systemInfo?.country)
-        assertEquals(1692660840, weather?.systemInfo?.sunset)
+        assertEquals(1692660840L, weather?.systemInfo?.sunset)
         assertEquals(3600, weather?.timezone)
         assertEquals(2643743, weather?.id)
-        assertEquals(200, weather?.coord)
+        assertEquals(200, weather?.statusCode)
 
     }
 

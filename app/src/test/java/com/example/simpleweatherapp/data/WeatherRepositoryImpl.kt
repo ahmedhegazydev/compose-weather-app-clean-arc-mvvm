@@ -73,14 +73,23 @@ class WeatherRepositoryImplTest {
         assertEquals(293.25, weather.main.temp)
     }
 
-//    @Test(expected = Exception::class)
-//    fun `getWeather throws exception on API error`() = runBlocking {
-//        // Mock error response from the API
-//        val mockResponse = MockResponse()
-//            .setResponseCode(500)
-//        mockWebServer.enqueue(mockResponse)
-//
-//        // Perform the API call and expect an exception
-//        weatherRepository.getWeather("InvalidCity")
-//    }
+    @Test
+    fun `getWeather throws exception on API error`() = runBlocking {
+        // Mock error response from the API
+        val mockResponse = MockResponse()
+            .setResponseCode(500)
+            .setBody("Internal Server Error") // Simulate server error response body
+        mockWebServer.enqueue(mockResponse)
+
+        try {
+            // Perform the API call
+            weatherRepository.getWeather("InvalidCity")
+            // Fail if no exception is thrown
+            assert(false) { "Expected an exception but none was thrown." }
+        } catch (e: Exception) {
+            // Assert the exception message
+            assertEquals("API error: Internal Server Error", e.message)
+        }
+    }
+
 }

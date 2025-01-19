@@ -41,10 +41,12 @@ class WeatherRepositoryImpl @Inject constructor(
                 throw Exception("API response body is null")
             }
         } else {
-            val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+            val errorMessage = response.errorBody()?.string().takeIf { it?.isNotEmpty() == true }
+                ?: "HTTP ${response.code()} ${response.message()}"
             throw Exception("API error: $errorMessage")
         }
     }
+
 
 }
 
