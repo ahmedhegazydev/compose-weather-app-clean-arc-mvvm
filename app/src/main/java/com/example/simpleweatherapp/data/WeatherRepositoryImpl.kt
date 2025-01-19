@@ -32,8 +32,20 @@ class WeatherRepositoryImpl @Inject constructor(
      */
     override suspend fun getWeather(city: String): Weather {
         val response = apiService.getWeather(city, BuildConfig.API_KEY)
-        return response.toDomain()
+
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                return body.toDomain() // Map WeatherDto to Weather
+            } else {
+                throw Exception("API response body is null")
+            }
+        } else {
+            val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+            throw Exception("API error: $errorMessage")
+        }
     }
+
 }
 
 /**

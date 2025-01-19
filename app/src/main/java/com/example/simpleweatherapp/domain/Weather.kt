@@ -102,7 +102,12 @@ data class Clouds(val all: Int)
  * @property sunrise Sunrise time in Unix timestamp format.
  * @property sunset Sunset time in Unix timestamp format.
  */
-data class SystemInfo(val country: String, val sunrise: Long, val sunset: Long)
+data class SystemInfo(
+
+    val type: Int,
+    val id: Int,
+    val country: String,
+    val sunrise: Long, val sunset: Long)
 
 /**
  * Data class representing a formatted and user-friendly view of weather information.

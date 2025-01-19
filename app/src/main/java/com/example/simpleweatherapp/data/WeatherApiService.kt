@@ -1,5 +1,6 @@
 package com.example.simpleweatherapp.data
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -19,5 +20,6 @@ interface WeatherApiService {
     suspend fun getWeather(
         @Query("q") city: String,
         @Query("appid") apiKey: String,
-    ): WeatherDto
+    ): Response<WeatherDto>
+
 }

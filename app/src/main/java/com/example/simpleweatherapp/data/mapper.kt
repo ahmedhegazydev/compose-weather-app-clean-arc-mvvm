@@ -61,4 +61,7 @@ fun CloudsDto.toDomain() = Clouds(all)
  *
  * @return A [SystemInfo] object with data mapped from [SysDto].
  */
-fun SysDto.toDomain() = SystemInfo(country, sunrise, sunset)
+fun SysDto.toDomain() = SystemInfo(
+    type,
+    id,
+    country, sunrise, sunset)
