@@ -56,9 +56,9 @@ class NetworkModuleTest {
     @Test
     fun testWeatherApiServiceFunctionality() = runBlocking {
         // Mock a request to ensure WeatherApiService works correctly (requires a valid API)
-        val response = weatherApiService.getWeather("London", BuildConfig.API_KEY)
+        val response = weatherApiService.getWeather("London", BuildConfig.API_KEY).body()
         assertNotNull(response)
-        assertNotNull(response.name)
-        assert(response.name.contains("London"))
+        assertNotNull(response?.name)
+        assert(response?.name?.contains("London") == true)
     }
 }

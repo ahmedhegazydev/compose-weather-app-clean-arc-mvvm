@@ -19,7 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner  = "com.example.simpleweatherapp.di.CustomTestRunner"
+        testInstrumentationRunner = "com.example.simpleweatherapp.di.CustomTestRunner"
 
     }
 
@@ -72,7 +72,6 @@ android {
     }
 
 
-
 }
 
 
@@ -87,8 +86,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
 
     implementation(libs.androidx.material3)
-//    implementation(libs.androidx.material)
-
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.runner)
@@ -110,10 +110,10 @@ dependencies {
     implementation(libs.logging.interceptor)
 
 
-    implementation( libs.androidx.navigation.compose)
-    implementation( libs.coil.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
 
-    implementation( libs.kotlinx.metadata.jvm)
+    implementation(libs.kotlinx.metadata.jvm)
 
     // Kotlin
     implementation(libs.kotlin.stdlib.v1910)
@@ -127,8 +127,8 @@ dependencies {
     implementation(libs.hilt.android.v255)
     ksp(libs.hilt.compiler)
 
-    implementation( libs.glide )
-    implementation( libs.ui)
+    implementation(libs.glide)
+    implementation(libs.ui)
     ksp(libs.compiler)
 
 
@@ -139,25 +139,25 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.slf4j.simple)
 
-    testImplementation( libs.mockwebserver)
-    testImplementation(  libs.androidx.room.testing)
-    testImplementation(  libs.androidx.core.testing)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.androidx.core.testing)
 
-    androidTestImplementation (libs.hilt.android.testing)
-    androidTestImplementation (libs.mockwebserver)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.mockwebserver)
 
-    testImplementation(  libs.mockito.inline)
+    testImplementation(libs.mockito.inline)
 
 
     // For Compose Testing
-    androidTestImplementation (libs.ui.test.junit4)
-    debugImplementation (libs.ui.tooling)
-    debugImplementation (libs.ui.test.manifest)
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
     implementation(libs.kotlin.reflect)
 
     androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation (libs.mockk.android)
+    androidTestImplementation(libs.mockk.android)
 
 
     androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.2") {
@@ -165,7 +165,7 @@ dependencies {
     }
 
 
-    testImplementation (libs.byte.buddy)
+    testImplementation(libs.byte.buddy)
 
 
 }

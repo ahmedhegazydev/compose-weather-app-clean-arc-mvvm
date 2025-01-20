@@ -21,3 +21,15 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.example.simpleweatherapp.** { *; }
+
+-keep class androidx.compose.** { *; }
+-keepclassmembers class * {
+    @androidx.compose.runtime.Composable *;
+}
+
+
+-keep class androidx.compose.** { *; }
+-keepclassmembers class * {
+    @androidx.compose.runtime.Composable <methods>;
+}
+-dontwarn androidx.compose.**
