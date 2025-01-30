@@ -1,8 +1,12 @@
 package com.example.simpleweatherapp.presentation
 
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.simpleweatherapp.R
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,7 +15,7 @@ import org.junit.runner.RunWith
 class DetailsScreenTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun displaysCityNameInAppBar() {
@@ -36,32 +40,31 @@ class DetailsScreenTest {
             .assertIsDisplayed()
     }
 
-//    @Test
-//    fun callsOnDismissWhenBackButtonClicked() {
-//        var onDismissCalled = false
-//        val onDismissLambda: () -> Unit = { onDismissCalled = true }
-//
-//        composeTestRule.setContent {
-//            DetailsScreen(
-//                description = "Sunny",
-//                temperature = "30°C",
-//                humidity = "50%",
-//                windSpeed = "10 km/h",
-//                iconUrl = "https://example.com/icon.png",
-//                cityName = "Cairo",
-//                timestamp = "10:00 AM",
-////                onDismiss = { onDismissCalled = true }
-//                        onDismiss = onDismissLambda
-//
-//            )
-//        }
-//
-//        composeTestRule
-//            .onNodeWithContentDescription("Back", useUnmergedTree = true)
-//            .performClick()
-//
-//        assert(onDismissCalled) { "onDismiss was not called when the back button was clicked" }
-//    }
+    @Test
+    fun callsOnDismissWhenBackButtonClicked() {
+        var onDismissCalled = false
+        val onDismissLambda: () -> Unit = { onDismissCalled = true }
+
+        composeTestRule.setContent {
+            DetailsScreen(
+                description = "Sunny",
+                temperature = "30°C",
+                humidity = "50%",
+                windSpeed = "10 km/h",
+                iconUrl = "https://example.com/icon.png",
+                cityName = "Cairo",
+                timestamp = "10:00 AM",
+                        onDismiss = onDismissLambda
+
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Back", useUnmergedTree = true)
+            .performClick()
+
+        assert(onDismissCalled) { "onDismiss was not called when the back button was clicked" }
+    }
 
     @Test
     fun displaysWeatherDetailsCorrectly() {
@@ -83,21 +86,16 @@ class DetailsScreenTest {
             )
         }
 
-        composeTestRule
-            .onNodeWithText("Description: $description")
-            .assertIsDisplayed()
+        // Get string resources using the activity context
+        val expectedDescription = composeTestRule.activity.getString(R.string.description, description)
+        val expectedTemp = composeTestRule.activity.getString(R.string.temp_c, temperature)
+        val expectedHumidity = composeTestRule.activity.getString(R.string.humidity, humidity)
+        val expectedWind = composeTestRule.activity.getString(R.string.wind_km_h, windSpeed)
 
-        composeTestRule
-            .onNodeWithText("Temperature: $temperature")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("Humidity: $humidity")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("Wind Speed: $windSpeed")
-            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(expectedDescription).assertIsDisplayed()
+        composeTestRule.onNodeWithText(expectedTemp).assertIsDisplayed()
+        composeTestRule.onNodeWithText(expectedHumidity).assertIsDisplayed()
+        composeTestRule.onNodeWithText(expectedWind).assertIsDisplayed()
     }
 
     @Test
@@ -120,25 +118,26 @@ class DetailsScreenTest {
             .assertIsDisplayed()
     }
 
-//    @Test
-//    fun displaysTimestampCorrectly() {
-//        val timestamp = "10:00 AM"
-//
-//        composeTestRule.setContent {
-//            DetailsScreen(
-//                description = "Sunny",
-//                temperature = "30°C",
-//                humidity = "50%",
-//                windSpeed = "10 km/h",
-//                iconUrl = "https://example.com/icon.png",
-//                cityName = "Cairo",
-//                timestamp = timestamp,
-//                onDismiss = {}
-//            )
-//        }
-//
-//        composeTestRule
-//            .onNodeWithText("Received on: $timestamp")
-//            .assertIsDisplayed()
-//    }
+    @Test
+    fun displaysTimestampCorrectly() {
+        val timestamp = "10:00 AM"
+        val cityName = "Cairo"
+
+        composeTestRule.setContent {
+            DetailsScreen(
+                description = "Sunny",
+                temperature = "30°C",
+                humidity = "50%",
+                windSpeed = "10 km/h",
+                iconUrl = "https://example.com/icon.png",
+                cityName = "Cairo",
+                timestamp = timestamp,
+                onDismiss = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Weather information for $cityName received on $timestamp")
+            .assertIsDisplayed()
+    }
 }

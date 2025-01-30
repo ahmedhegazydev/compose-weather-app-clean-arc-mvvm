@@ -40,14 +40,14 @@ fun DetailsScreen(
         topBar = {
             CitiesTopAppBar(
                 title = cityName,
-                navigationIcon = {
-                    IconButton(onClick = { onDismiss() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                },
+//                navigationIcon = {
+//                    IconButton(onClick = { onDismiss() }) {
+//                        Icon(
+//                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+//                            contentDescription = stringResource(R.string.back)
+//                        )
+//                    }
+//                },
             )
         }
     ) { paddingValues ->

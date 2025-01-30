@@ -36,18 +36,18 @@ fun HistoricalWeatherScreen(
             // TopAppBar with a "Done" button for navigation.
             CitiesTopAppBar(
                 title = stringResource(R.string.historical, cityName),
-                navigationIcon = {
-                    TextButton(
-                        onClick = { onDismiss() }, // Trigger onDismiss when clicked.
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.done),
-                            color = Color.Black,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                },
+//                navigationIcon = {
+//                    TextButton(
+//                        onClick = { onDismiss() },
+//                        modifier = Modifier.padding(start = 8.dp)
+//                    ) {
+//                        Text(
+//                            text = stringResource(R.string.done),
+//                            color = Color.Black,
+//                            style = MaterialTheme.typography.titleMedium
+//                        )
+//                    }
+//                },
             )
         }
     ) { paddingValues ->

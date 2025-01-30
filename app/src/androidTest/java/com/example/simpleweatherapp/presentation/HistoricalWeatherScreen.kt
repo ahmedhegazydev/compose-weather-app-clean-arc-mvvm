@@ -1,8 +1,10 @@
 package com.example.simpleweatherapp.presentation
 
 import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import com.example.simpleweatherapp.domain.WeatherViewState
@@ -14,7 +16,7 @@ import com.example.simpleweatherapp.domain.WeatherDescription
 class HistoricalWeatherScreenTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun displaysCityNameInTopAppBar() {
@@ -78,40 +80,40 @@ class HistoricalWeatherScreenTest {
         assert(onDismissCalled)
     }
 
-//    @Test
-//    fun displaysWeatherItemsInLazyColumn() {
-//        val weatherDescriptions = listOf(
-//            WeatherDescription(id = 1, main = "Clear", description = "Sunny", icon = "01d"),
-//            WeatherDescription(id = 2, main = "Clouds", description = "Cloudy", icon = "02d")
-//        )
-//        val weatherViewState = WeatherViewState(
-//            description = "",
-//            temperature = "",
-//            humidity = "",
-//            windSpeed = "",
-//            iconUrl = "",
-//            cityName = "Cairo",
-//            timestamp = "",
-//            location = "",
-//            weathers = weatherDescriptions
-//        )
-//
-//        composeTestRule.setContent {
-//            HistoricalWeatherScreen(
-//                weather = weatherViewState,
-//                cityName = "Cairo",
-//                onDismiss = {}
-//            )
-//        }
-//
-//        composeTestRule
-//            .onNodeWithText("Sunny")
-//            .assertIsDisplayed()
-//
-//        composeTestRule
-//            .onNodeWithText("Cloudy")
-//            .assertIsDisplayed()
-//    }
+    @Test
+    fun displaysWeatherItemsInLazyColumn() {
+        val weatherDescriptions = listOf(
+            WeatherDescription(id = 1, main = "Clear", description = "Sunny", icon = "01d"),
+            WeatherDescription(id = 2, main = "Clouds", description = "Cloudy", icon = "02d")
+        )
+        val weatherViewState = WeatherViewState(
+            description = "",
+            temperature = "",
+            humidity = "",
+            windSpeed = "",
+            iconUrl = "",
+            cityName = "Cairo",
+            timestamp = "",
+            location = "",
+            weathers = weatherDescriptions
+        )
+
+        composeTestRule.setContent {
+            HistoricalWeatherScreen(
+                weather = weatherViewState,
+                cityName = "Cairo",
+                onDismiss = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Sunny")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Cloudy")
+            .assertIsDisplayed()
+    }
 
     @Test
     fun displaysArrowForwardIconInWeatherItem() {
